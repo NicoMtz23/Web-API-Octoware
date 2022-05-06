@@ -12,13 +12,12 @@ export const getUsers = async (req, res) => {
 };
 
 export const getUserByEmail = async (req, res) => {
-    const { email } = req.body;
-
     try {
         const pool = await getConnection();
+
         const result = await pool
             .request()
-            .input("email", sql.VarChar, email )
+            .input("email", req.query.email)
             .query(queries.getUserByEmail);
         res.json(result.recordset);
     } catch (error) {

@@ -11,6 +11,6 @@ router.delete("/users/:id_usr", deleteUserById)
 
 router.put("/users/:id_usr", updateRoleById)
 
-router.get("/users/email", getUserByEmail)
+router.get("/users/email/", getUserByEmail)
 
 export default router
