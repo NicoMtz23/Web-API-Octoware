@@ -116,7 +116,6 @@ export const generateGoogleToken = async (req, res) => {
   verify()
     .then(() => {
         var token = generateAccessToken(dataToken);
-        console.log(token);
         res.json(token);
     })
     .catch(console.error);
@@ -127,7 +126,6 @@ export const generateMSToken = async (req, res) => {
 
   var dataToken = { name: name, email: email };
   var token = generateAccessToken(dataToken);
-  console.log(token);
   res.json(token);
 };
 
