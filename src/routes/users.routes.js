@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUser, deleteUserById, getUsers, updateRoleById, getUserByEmail, generateGoogleToken, generateMSToken, getFav, postFav, putFav} from "../controllers/users.controller"
+import { createUser, deleteUserById, getUsers, updateRoleById, getUserByEmail, generateGoogleToken, generateMSToken, postFavByIDs, getFavByIDs, putFavByIDs, getAllFavoritesByUserID} from "../controllers/users.controller"
 
 const router = Router()
 
@@ -17,8 +17,12 @@ router.post("/users/auth/google", generateGoogleToken)
 
 router.post("/users/auth/ms", generateMSToken)
 
-router.get("/users/favorites/", getFav)
+router.get("/favDisp", getFavByIDs)
 
-router.post("/users/favorites/", postFav)
+router.post("/favDisp", postFavByIDs)
+
+router.put("/favDisp", putFavByIDs)
+
+router.get("/tablefavs", getAllFavoritesByUserID)
 
 export default router
