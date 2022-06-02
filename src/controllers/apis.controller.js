@@ -161,3 +161,28 @@ export const getResponseByID = async (req, res) => {
     res.send(error.message);
   }
 };
+
+export const addCategoriesByID = async (req, res) => {
+  const { nombre_cat } = req.body;
+
+  if (
+    nombre_cat == null
+  ) {
+    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
+  }
+
+  try {
+    
+    const pool = await getConnection();
+
+   const result = await pool
+      .request()
+      .input("id_api", req.params.id_api)
+      .input("nombre_cat", sql.VarChar, nombre_cat)
+      .query(queries.addCategoriesByID);
+    res.json("Se ha añadido la Categoría.");
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};

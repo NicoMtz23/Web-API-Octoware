@@ -1,6 +1,6 @@
 import { config } from "dotenv";
 import { Router } from "express";
-import { getTableData, getApiDetail, createAPI, getCategories, getCategoriesByID, getEndpointsByCat, getSpecificEndpointByID, getParamsByID, getResponseByID } from "../controllers/apis.controller";
+import { getTableData, getApiDetail, createAPI, getCategories, getCategoriesByID, getEndpointsByCat, getSpecificEndpointByID, getParamsByID, getResponseByID, addCategoriesByID } from "../controllers/apis.controller";
 
 const router = Router()
 
@@ -21,5 +21,7 @@ router.get("/endpoints/:id_end", getSpecificEndpointByID)
 router.get("/query/:id_end", getParamsByID)
 
 router.get("/response/:id_end", getResponseByID)
+
+router.post("/categories/:id_api", addCategoriesByID )
 
 export default router
