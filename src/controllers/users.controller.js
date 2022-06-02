@@ -30,6 +30,82 @@ export const getUserByEmail = async (req, res) => {
   }
 };
 
+export const getFav = async (req, res) => {
+  const { id_usr, id_end } = req.body;
+
+  // validating
+  if (
+    id_usr == null ||
+    id_end == null
+  ) {
+    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
+  }
+
+  try {
+    const pool = await getConnection();
+
+    await pool
+      .request()
+      .input("id_usr", sql.Int, id_usr)
+      .input("id_end", sql.Int, id_end)
+      .query(queries.getFavorite);
+
+    res.json(result.recordset);
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
+export const postFav = async (req, res) => {
+  const { id_usr, id_end } = req.body;
+
+  // validating
+  if (
+    id_usr == null ||
+    id_end == null
+  ) {
+    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
+  }
+
+  try {
+    const pool = await getConnection();
+
+    await pool
+      .request()
+      .input("id_usr", sql.Int, id_usr)
+      .input("id_end", sql.Int, id_end)
+      .query(queries.postFavorite);
+
+    res.json(result.recordset);
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
+export const putFav = async (req, res) => {
+  const { id_tipo_usr } = req.body;
+
+  // validating
+  if (id_tipo_usr == null) {
+    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
+  }
+
+  try {
+    const pool = await getConnection();
+    await pool
+      .request()
+      .input("id_tipo_usr", sql.Int, id_tipo_usr)
+      .input("id_usr", req.params.id_usr)
+      .query(queries.updateRoleById);
+    res.json("Se ha modificado con éxito el rol de este usuario.");
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+}
+
 export const createUser = async (req, res) => {
   const { nombre_usr, email } = req.body;
   let { id_tipo_usr } = req.body;

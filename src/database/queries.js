@@ -13,5 +13,7 @@ export const queries = {
     getSpecificEndpointByID: "SELECT Endpoint.id_end,  Endpoint.nombre_end, Endpoint.url_end, Endpoint.docum_end, Endpoint.pruebas_end, Endpoint.expected_ans, Tipo_Endpoint.tipo_end FROM DBO.Endpoint JOIN Tipo_Endpoint ON Endpoint.id_tipo_end = Tipo_Endpoint.id_tipo_end WHERE id_end = @id_end",
     getParamsByID: "SELECT Parametro.id_param, Parametro.nombre_param, Parametro.obligatorio_param, Tipo_Param.tipo_param FROM DBO.Parametro JOIN Tipo_Param ON Parametro.id_tipo_param = Tipo_Param.id_tipo_param WHERE id_end = @id_end",
     getResponseByID: "SELECT Respuestas_End.id_respuestas_end, Respuestas_End.name_resp, Tipo_Param.tipo_param FROM Respuestas_End JOIN Tipo_Param ON Respuestas_End.id_tipo_param = Tipo_Param.id_tipo_param WHERE id_end = @id_end",
-    addCategoriesByID: "INSERT INTO [IPS_API_MANAGEMENT_8].dbo.Categoria VALUES (@nombre_cat, @id_api);"
+    addCategoriesByID: "INSERT INTO [IPS_API_MANAGEMENT_8].dbo.Categoria VALUES (@nombre_cat, @id_api);",
+    getFavorite: "",
+    addFavorite: ""
 }
