@@ -34,7 +34,7 @@ export const getFavByIDs = async (req, res) => {
   try {
     const pool = await getConnection();
 
-    await pool
+    const result  = await pool
       .request()
       .input("id_end", req.query.id_end)
       .input("id_usr", req.query.id_usr)
@@ -48,7 +48,7 @@ export const getFavByIDs = async (req, res) => {
 };
 
 export const postFav = async (req, res) => {
-  const { id_usr, id_end } = req.body;
+  const { id_end, id_usr } = req.body;
 
   // validating
   if (
@@ -63,11 +63,11 @@ export const postFav = async (req, res) => {
 
     await pool
       .request()
-      .input("id_usr", sql.Int, id_usr)
       .input("id_end", sql.Int, id_end)
-      .query(queries.postFavorite);
+      .input("id_usr", sql.Int, id_usr)
+      .query(queries.addFavorite);
 
-    res.json(result.recordset);
+    res.json("Favorite added succesfully!");
   } catch (error) {
     res.status(500);
     res.send(error.message);
