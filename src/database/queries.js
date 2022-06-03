@@ -17,5 +17,13 @@ export const queries = {
     getFavorite: "EXEC SP_GET_FAV @id_end , @id_usr",
     addFavorite: "EXEC SP_POST_FAV @id_end , @id_usr",
     updateFavoriteState: "EXEC SP_PUT_FAV @id_end , @id_usr",
-    getAllFavoritesByUserID: "SELECT API.nombre_api,  Categoria.nombre_cat, Endpoint.nombre_end, Tipo_Endpoint.tipo_end FROM DBO.Favorito JOIN Endpoint ON Favorito.id_end = Endpoint.id_end JOIN Tipo_Endpoint ON Tipo_Endpoint.id_tipo_end = Endpoint.id_tipo_end  JOIN Categoria ON Endpoint.id_cat= Categoria.id_cat JOIN API ON Categoria.id_api = API.id_api WHERE Favorito.id_usr = @id_usr;"
+    getAllFavoritesByUserID: "SELECT API.nombre_api,  Categoria.nombre_cat, Endpoint.nombre_end, Tipo_Endpoint.tipo_end FROM DBO.Favorito JOIN Endpoint ON Favorito.id_end = Endpoint.id_end JOIN Tipo_Endpoint ON Tipo_Endpoint.id_tipo_end = Endpoint.id_tipo_end  JOIN Categoria ON Endpoint.id_cat= Categoria.id_cat JOIN API ON Categoria.id_api = API.id_api WHERE Favorito.id_usr = @id_usr;",
+    deleteAPI: "EXEC SP_TRANS_DELETEAPI @id_api",
+    updateAPI: "UPDATE API SET nombre_api = @nombre_api, version_api = @version_api, url_base = @url_base, descripcion_api = @descripcion_api, api_key = @api_key WHERE id_api = @id_api",
+    updateCategoryByID: "UPDATE Categoria SET nombre_cat = @nombre_cat WHERE id_cat = @id_cat",
+    deleteCat: "EXEC SP_TRANS_DELETECategoria @id_cat",
+    addNewMethod:"INSERT INTO dbo.Endpoint VALUES (@nombre_end, @url_end, @docum_end, @pruebas_end, @expected_ans, @id_cat, @id_tipo_end);",
+    deleteMethodByID: "EXEC SP_TRANS_DELETEEndpoint @id_end",
+    updateMethod:"UPDATE Endpoint SET nombre_end = @nombre_end, url_end = @url_end, docum_end = @docum_end, pruebas_end = @pruebas_end, expected_ans = @expected_ans, id_tipo_end = @id_tipo_end WHERE id_end = @id_end"
 }
+ 
