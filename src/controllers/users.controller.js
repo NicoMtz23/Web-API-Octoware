@@ -30,6 +30,7 @@ export const getUserByEmail = async (req, res) => {
   }
 };
 
+<<<<<<< Updated upstream
 export const getFav = async (req, res) => {
   const { id_usr, id_end } = req.body;
 
@@ -41,16 +42,19 @@ export const getFav = async (req, res) => {
     return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
   }
 
+=======
+export const getFavByIDs = async (req, res) => {
+>>>>>>> Stashed changes
   try {
     const pool = await getConnection();
 
     await pool
       .request()
-      .input("id_usr", sql.Int, id_usr)
-      .input("id_end", sql.Int, id_end)
+      .input("id_end", req.query.id_end)
+      .input("id_usr", req.query.id_usr)
       .query(queries.getFavorite);
-
-    res.json(result.recordset);
+  
+      res.json(result.recordset[0]);
   } catch (error) {
     res.status(500);
     res.send(error.message);

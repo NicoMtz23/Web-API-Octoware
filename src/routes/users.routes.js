@@ -17,7 +17,11 @@ router.post("/users/auth/google", generateGoogleToken)
 
 router.post("/users/auth/ms", generateMSToken)
 
+<<<<<<< Updated upstream
 router.get("/users/favorites/", getFav)
+=======
+router.get("/favDisp/", getFavByIDs)
+>>>>>>> Stashed changes
 
 router.post("/users/favorites/", postFav)
 
