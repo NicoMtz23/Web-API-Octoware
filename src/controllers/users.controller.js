@@ -31,34 +31,24 @@ export const getUserByEmail = async (req, res) => {
 };
 
 export const getFavByIDs = async (req, res) => {
-  const { id_usr, id_end } = req.body;
-
-  // validating
-  if (
-    id_usr == null ||
-    id_end == null
-  ) {
-    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
-  }
-
   try {
     const pool = await getConnection();
 
-    const result = await pool
+    const result  = await pool
       .request()
-      .input("id_usr", sql.Int, id_usr)
-      .input("id_end", sql.Int, id_end)
+      .input("id_end", req.query.id_end)
+      .input("id_usr", req.query.id_usr)
       .query(queries.getFavorite);
-
-    res.json(result.recordset);
+  
+      res.json(result.recordset[0]);
   } catch (error) {
     res.status(500);
     res.send(error.message);
   }
 };
 
-export const postFavByIDs = async (req, res) => {
-  const { id_usr, id_end } = req.body;
+export const postFav = async (req, res) => {
+  const { id_end, id_usr } = req.body;
 
   // validating
   if (
@@ -73,20 +63,21 @@ export const postFavByIDs = async (req, res) => {
 
     await pool
       .request()
-      .input("id_usr", sql.Int, id_usr)
       .input("id_end", sql.Int, id_end)
+      .input("id_usr", sql.Int, id_usr)
       .query(queries.addFavorite);
 
-    res.json('Se ha añadido como favorito.');
+    res.json("Favorite added succesfully!");
   } catch (error) {
     res.status(500);
     res.send(error.message);
   }
 };
 
-export const putFavByIDs = async (req,res) => {
-  const {id_usr, id_end} = req.body;
+export const putFav = async (req, res) => {
+  const { id_end, id_usr } = req.body;
 
+  // validating
   if (
     id_usr == null ||
     id_end == null
@@ -99,11 +90,11 @@ export const putFavByIDs = async (req,res) => {
 
     await pool
       .request()
-      .input("id_usr", sql.Int, id_usr)
       .input("id_end", sql.Int, id_end)
+      .input("id_usr", sql.Int, id_usr)
       .query(queries.updateFavoriteState);
 
-    res.json('Se ha cambiado la disponibilidad.');
+    res.json("Favorite updated succesfully!");
   } catch (error) {
     res.status(500);
     res.send(error.message);
