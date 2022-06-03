@@ -30,21 +30,7 @@ export const getUserByEmail = async (req, res) => {
   }
 };
 
-<<<<<<< Updated upstream
-export const getFav = async (req, res) => {
-  const { id_usr, id_end } = req.body;
-
-  // validating
-  if (
-    id_usr == null ||
-    id_end == null
-  ) {
-    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
-  }
-
-=======
 export const getFavByIDs = async (req, res) => {
->>>>>>> Stashed changes
   try {
     const pool = await getConnection();
 
@@ -104,6 +90,29 @@ export const putFav = async (req, res) => {
       .input("id_usr", req.params.id_usr)
       .query(queries.updateRoleById);
     res.json("Se ha modificado con éxito el rol de este usuario.");
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+}
+
+export const getAllFavoritesByUserID = async (req,res) => {
+  try {
+    const pool = await getConnection();
+
+    const result = await pool
+      .request()
+      .input("id_usr", req.query.id_usr)
+      .query(queries.getAllFavoritesByUserID);
+    
+      var obj = {
+        count: 0,
+        entries: result.recordset,
+      };
+  
+      obj.count = Object.keys(result.recordset).length;
+  
+      res.json(obj);
   } catch (error) {
     res.status(500);
     res.send(error.message);

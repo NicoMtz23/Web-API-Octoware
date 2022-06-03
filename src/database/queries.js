@@ -13,6 +13,9 @@ export const queries = {
     getSpecificEndpointByID: "SELECT Endpoint.id_end,  Endpoint.nombre_end, Endpoint.url_end, Endpoint.docum_end, Endpoint.pruebas_end, Endpoint.expected_ans, Tipo_Endpoint.tipo_end FROM DBO.Endpoint JOIN Tipo_Endpoint ON Endpoint.id_tipo_end = Tipo_Endpoint.id_tipo_end WHERE id_end = @id_end",
     getParamsByID: "SELECT Parametro.id_param, Parametro.nombre_param, Parametro.obligatorio_param, Tipo_Param.tipo_param FROM DBO.Parametro JOIN Tipo_Param ON Parametro.id_tipo_param = Tipo_Param.id_tipo_param WHERE id_end = @id_end",
     getResponseByID: "SELECT Respuestas_End.id_respuestas_end, Respuestas_End.name_resp, Tipo_Param.tipo_param FROM Respuestas_End JOIN Tipo_Param ON Respuestas_End.id_tipo_param = Tipo_Param.id_tipo_param WHERE id_end = @id_end",
-    getFavorite: "",
-    addFavorite: ""
+    addCategoriesByID: "INSERT INTO [IPS_API_MANAGEMENT_8].dbo.Categoria VALUES (@nombre_cat, @id_api);",
+    getFavorite: "EXEC SP_GET_FAV @id_end , @id_usr",
+    addFavorite: "EXEC SP_POST_FAV @id_end , @id_usr",
+    updateFavoriteState: "EXEC SP_PUT_FAV @id_end , @id_usr",
+    getAllFavoritesByUserID: "SELECT API.nombre_api,  Categoria.nombre_cat, Endpoint.nombre_end, Tipo_Endpoint.tipo_end FROM DBO.Favorito JOIN Endpoint ON Favorito.id_end = Endpoint.id_end JOIN Tipo_Endpoint ON Tipo_Endpoint.id_tipo_end = Endpoint.id_tipo_end  JOIN Categoria ON Endpoint.id_cat= Categoria.id_cat JOIN API ON Categoria.id_api = API.id_api WHERE Favorito.id_usr = @id_usr;"
 }
