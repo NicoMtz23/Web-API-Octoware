@@ -17,5 +17,5 @@ export const queries = {
     getFavorite: "EXEC SP_GET_FAV @id_end , @id_usr",
     addFavorite: "EXEC SP_POST_FAV @id_end , @id_usr",
     updateFavoriteState: "EXEC SP_PUT_FAV @id_end , @id_usr",
-    getAllFavoritesByUserID: "SELECT API.nombre_api,  Categoria.nombre_cat, Endpoint.nombre_end FROM DBO.Favorito JOIN Endpoint ON Favorito.id_end = Endpoint.id_end JOIN Categoria ON Endpoint.id_cat= Categoria.id_cat JOIN API ON Categoria.id_api = API.id_api WHERE Favorito.id_usr = @id_usr"
+    getAllFavoritesByUserID: "SELECT API.nombre_api,  Categoria.nombre_cat, Endpoint.nombre_end, Tipo_Endpoint.tipo_end FROM DBO.Favorito JOIN Endpoint ON Favorito.id_end = Endpoint.id_end JOIN Tipo_Endpoint ON Tipo_Endpoint.id_tipo_end = Endpoint.id_tipo_end  JOIN Categoria ON Endpoint.id_cat= Categoria.id_cat JOIN API ON Categoria.id_api = API.id_api WHERE Favorito.id_usr = @id_usr;"
 }

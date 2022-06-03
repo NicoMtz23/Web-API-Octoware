@@ -23,6 +23,6 @@ router.post("/favDisp", postFavByIDs)
 
 router.put("/favDisp", putFavByIDs)
 
-router.get("/tablefavs", getAllFavoritesByUserID)
+router.get("/tablefavs/", getAllFavoritesByUserID)
 
 export default router

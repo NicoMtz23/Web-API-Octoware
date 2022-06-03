@@ -111,23 +111,22 @@ export const putFavByIDs = async (req,res) => {
 }
 
 export const getAllFavoritesByUserID = async (req,res) => {
-  const {id_usr} = req.body;
-
-  if (
-    id_usr == null
-  ) {
-    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
-  }
-
   try {
     const pool = await getConnection();
 
     const result = await pool
       .request()
-      .input("id_usr", sql.Int, id_usr)
+      .input("id_usr", req.query.id_usr)
       .query(queries.getAllFavoritesByUserID);
-
-    res.json(result.recordset);
+    
+      var obj = {
+        count: 0,
+        entries: result.recordset,
+      };
+  
+      obj.count = Object.keys(result.recordset).length;
+  
+      res.json(obj);
   } catch (error) {
     res.status(500);
     res.send(error.message);
