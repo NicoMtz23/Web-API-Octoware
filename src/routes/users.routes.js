@@ -19,7 +19,9 @@ router.post("/users/auth/ms", generateMSToken)
 
 router.get("/favDisp/", getFavByIDs)
 
-router.post("/users/favorites/", postFav)
+router.post("/favDisp/", postFav)
+
+router.put('/favDisp/', putFav)
 
 router.get("/tablefavs/", getAllFavoritesByUserID)
 

@@ -75,21 +75,26 @@ export const postFav = async (req, res) => {
 };
 
 export const putFav = async (req, res) => {
-  const { id_tipo_usr } = req.body;
+  const { id_end, id_usr } = req.body;
 
   // validating
-  if (id_tipo_usr == null) {
+  if (
+    id_usr == null ||
+    id_end == null
+  ) {
     return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
   }
 
   try {
     const pool = await getConnection();
+
     await pool
       .request()
-      .input("id_tipo_usr", sql.Int, id_tipo_usr)
-      .input("id_usr", req.params.id_usr)
-      .query(queries.updateRoleById);
-    res.json("Se ha modificado con éxito el rol de este usuario.");
+      .input("id_end", sql.Int, id_end)
+      .input("id_usr", sql.Int, id_usr)
+      .query(queries.updateFavoriteState);
+
+    res.json("Favorite updated succesfully!");
   } catch (error) {
     res.status(500);
     res.send(error.message);
