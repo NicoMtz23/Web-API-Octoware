@@ -30,100 +30,6 @@ export const getUserByEmail = async (req, res) => {
   }
 };
 
-export const getFavByIDs = async (req, res) => {
-  try {
-    const pool = await getConnection();
-
-    const result  = await pool
-      .request()
-      .input("id_end", req.query.id_end)
-      .input("id_usr", req.query.id_usr)
-      .query(queries.getFavorite);
-  
-      res.json(result.recordset[0]);
-  } catch (error) {
-    res.status(500);
-    res.send(error.message);
-  }
-};
-
-export const postFav = async (req, res) => {
-  const { id_end, id_usr } = req.body;
-
-  // validating
-  if (
-    id_usr == null ||
-    id_end == null
-  ) {
-    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
-  }
-
-  try {
-    const pool = await getConnection();
-
-    await pool
-      .request()
-      .input("id_end", sql.Int, id_end)
-      .input("id_usr", sql.Int, id_usr)
-      .query(queries.addFavorite);
-
-    res.json("Favorite added succesfully!");
-  } catch (error) {
-    res.status(500);
-    res.send(error.message);
-  }
-};
-
-export const putFav = async (req, res) => {
-  const { id_end, id_usr } = req.body;
-
-  // validating
-  if (
-    id_usr == null ||
-    id_end == null
-  ) {
-    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
-  }
-
-  try {
-    const pool = await getConnection();
-
-    await pool
-      .request()
-      .input("id_end", sql.Int, id_end)
-      .input("id_usr", sql.Int, id_usr)
-      .query(queries.updateFavoriteState);
-
-    res.json("Favorite updated succesfully!");
-  } catch (error) {
-    res.status(500);
-    res.send(error.message);
-  }
-}
-
-export const getAllFavoritesByUserID = async (req,res) => {
-  try {
-    const pool = await getConnection();
-
-    const result = await pool
-      .request()
-      .input("id_usr", req.query.id_usr)
-      .query(queries.getAllFavoritesByUserID);
-    
-      var obj = {
-        count: 0,
-        entries: result.recordset,
-      };
-  
-      obj.count = Object.keys(result.recordset).length;
-  
-      res.json(obj);
-  } catch (error) {
-    res.status(500);
-    res.send(error.message);
-  }
-}
-
 export const createUser = async (req, res) => {
   const { nombre_usr, email } = req.body;
   let { id_tipo_usr } = req.body;
@@ -146,6 +52,24 @@ export const createUser = async (req, res) => {
       .query(queries.addNewUser);
 
     res.json("User has registered.");
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
+export const LogicDeleteUserById = async (req, res) => {
+  try {
+    const pool = await getConnection();
+
+    const result = await pool
+      .request()
+      .input("id_usr", sql.Int, req.params.id_usr)
+      .query(queries.logicDeleteUser);
+
+    if (result.rowsAffected[0] === 0) return res.sendStatus(404);
+
+    return res.json("Se ha eliminado de forma logica este usuario.");
   } catch (error) {
     res.status(500);
     res.send(error.message);
@@ -225,4 +149,98 @@ export const generateMSToken = async (req, res) => {
 
 function generateAccessToken(payload) {
   return jwt.sign(payload, process.env.JWT_SECRET);
+}
+
+export const getFavByIDs = async (req, res) => {
+  try {
+    const pool = await getConnection();
+
+    const result  = await pool
+      .request()
+      .input("id_api", req.query.id_api)
+      .input("id_usr", req.query.id_usr)
+      .query(queries.getFavorite);
+  
+      res.json(result.recordset[0]);
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
+export const postFav = async (req, res) => {
+  const { id_api, id_usr } = req.body;
+
+  // validating
+  if (
+    id_api == null ||
+    id_usr == null
+  ) {
+    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
+  }
+
+  try {
+    const pool = await getConnection();
+
+    await pool
+      .request()
+      .input("id_api", sql.Int, id_api)
+      .input("id_usr", sql.Int, id_usr)
+      .query(queries.addFavorite);
+
+    res.json("Favorite added succesfully!");
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
+export const putFav = async (req, res) => {
+  const { id_api, id_usr } = req.body;
+
+  // validating
+  if (
+    id_usr == null ||
+    id_api == null
+  ) {
+    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
+  }
+
+  try {
+    const pool = await getConnection();
+
+    await pool
+      .request()
+      .input("id_api", sql.Int, id_api)
+      .input("id_usr", sql.Int, id_usr)
+      .query(queries.updateFavoriteState);
+
+    res.json("Favorite updated succesfully!");
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+}
+
+export const getAllFavoritesByUserID = async (req,res) => {
+  try {
+    const pool = await getConnection();
+
+    const result = await pool
+      .request()
+      .input("id_usr", req.query.id_usr)
+      .query(queries.getAllFavoritesByUserID);
+    
+      var obj = {
+        count: 0,
+        entries: result.recordset,
+      };
+  
+      obj.count = Object.keys(result.recordset).length;
+  
+      res.json(obj);
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
 }

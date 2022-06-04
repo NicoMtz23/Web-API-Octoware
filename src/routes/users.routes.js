@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUser, deleteUserById, getUsers, updateRoleById, getUserByEmail, generateGoogleToken, generateMSToken, getFavByIDs, postFav, putFav, getAllFavoritesByUserID} from "../controllers/users.controller"
+import { createUser, LogicDeleteUserById, deleteUserById, getUsers, updateRoleById, getUserByEmail, generateGoogleToken, generateMSToken, getFavByIDs, postFav, putFav, getAllFavoritesByUserID} from "../controllers/users.controller"
 
 const router = Router()
 
@@ -7,9 +7,11 @@ router.get("/users", getUsers)
 
 router.post("/users", createUser)
 
-router.delete("/users/:id_usr", deleteUserById)
-
 router.put("/users/:id_usr", updateRoleById)
+
+router.put("/users/estatus/:id_usr", LogicDeleteUserById)
+
+router.delete("/users/:id_usr", deleteUserById)
 
 router.get("/users/email/", getUserByEmail)
 
