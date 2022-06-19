@@ -4,7 +4,8 @@ const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(config.GOOGLE_CLIENT_ID);
 var jwt = require("jsonwebtoken");
 
-export const getUsers = async (req, res) => {
+//GET###############################################################################################################################################################################################
+export const getAllUsers = async (req, res) => {
   try {
     const pool = await getConnection();
     const result = await pool.request().query(queries.getAllUsers);
@@ -30,7 +31,9 @@ export const getUserByEmail = async (req, res) => {
   }
 };
 
-export const createUser = async (req, res) => {
+
+//POST##############################################################################################################################################################################################
+export const addNewUser = async (req, res) => {
   const { nombre_usr, email } = req.body;
   let { id_tipo_usr } = req.body;
 
@@ -58,43 +61,9 @@ export const createUser = async (req, res) => {
   }
 };
 
-export const LogicDeleteUserById = async (req, res) => {
-  try {
-    const pool = await getConnection();
 
-    const result = await pool
-      .request()
-      .input("id_usr", sql.Int, req.params.id_usr)
-      .query(queries.logicDeleteUser);
-
-    if (result.rowsAffected[0] === 0) return res.sendStatus(404);
-
-    return res.json("Se ha eliminado de forma logica este usuario.");
-  } catch (error) {
-    res.status(500);
-    res.send(error.message);
-  }
-};
-
-export const deleteUserById = async (req, res) => {
-  try {
-    const pool = await getConnection();
-
-    const result = await pool
-      .request()
-      .input("id_usr", req.params.id_usr)
-      .query(queries.deleteUser);
-
-    if (result.rowsAffected[0] === 0) return res.sendStatus(404);
-
-    return res.json("Se ha eliminado este usuario.");
-  } catch (error) {
-    res.status(500);
-    res.send(error.message);
-  }
-};
-
-export const updateRoleById = async (req, res) => {
+//PUT###############################################################################################################################################################################################
+export const updateRoleByID = async (req, res) => {
   const { id_tipo_usr } = req.body;
 
   // validating
@@ -108,7 +77,7 @@ export const updateRoleById = async (req, res) => {
       .request()
       .input("id_tipo_usr", sql.Int, id_tipo_usr)
       .input("id_usr", req.params.id_usr)
-      .query(queries.updateRoleById);
+      .query(queries.updateRoleByID);
     res.json("Se ha modificado con éxito el rol de este usuario.");
   } catch (error) {
     res.status(500);
@@ -116,6 +85,61 @@ export const updateRoleById = async (req, res) => {
   }
 };
 
+export const logicDeleteUserByID = async (req, res) => {
+  try {
+    const pool = await getConnection();
+
+    const result = await pool
+      .request()
+      .input("id_usr", sql.Int, req.params.id_usr)
+      .query(queries.logicDeleteUserByID);
+
+    if (result.rowsAffected[0] === 0) return res.sendStatus(404);
+
+    return res.json("Se ha eliminado de forma logica este usuario.");
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
+export const logicActivationUserByID = async (req, res) => {
+  try {
+    const pool = await getConnection();
+
+    const result = await pool
+      .request()
+      .input("id_usr", sql.Int, req.params.id_usr)
+      .query(queries.logicActivationUserByID);
+
+    return res.json("Se ha activado de forma logica este usuario.");
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+}
+
+
+//DELETE############################################################################################################################################################################################
+export const deleteUserByID = async (req, res) => {
+  try {
+    const pool = await getConnection();
+
+    const result = await pool
+      .request()
+      .input("id_usr", req.params.id_usr)
+      .query(queries.deleteUserByID);
+
+    if (result.rowsAffected[0] === 0) return res.sendStatus(404);
+
+    return res.json("Se ha eliminado este usuario.");
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
+//AUTH##############################################################################################################################################################################################
 export const generateGoogleToken = async (req, res) => {
   const { id_token } = req.body;
 
@@ -149,98 +173,4 @@ export const generateMSToken = async (req, res) => {
 
 function generateAccessToken(payload) {
   return jwt.sign(payload, process.env.JWT_SECRET);
-}
-
-export const getFavByIDs = async (req, res) => {
-  try {
-    const pool = await getConnection();
-
-    const result  = await pool
-      .request()
-      .input("id_api", req.query.id_api)
-      .input("id_usr", req.query.id_usr)
-      .query(queries.getFavorite);
-  
-      res.json(result.recordset[0]);
-  } catch (error) {
-    res.status(500);
-    res.send(error.message);
-  }
-};
-
-export const postFav = async (req, res) => {
-  const { id_api, id_usr } = req.body;
-
-  // validating
-  if (
-    id_api == null ||
-    id_usr == null
-  ) {
-    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
-  }
-
-  try {
-    const pool = await getConnection();
-
-    await pool
-      .request()
-      .input("id_api", sql.Int, id_api)
-      .input("id_usr", sql.Int, id_usr)
-      .query(queries.addFavorite);
-
-    res.json("Favorite added succesfully!");
-  } catch (error) {
-    res.status(500);
-    res.send(error.message);
-  }
-};
-
-export const putFav = async (req, res) => {
-  const { id_api, id_usr } = req.body;
-
-  // validating
-  if (
-    id_usr == null ||
-    id_api == null
-  ) {
-    return res.status(400).json({ msg: "Bad Request. Please fill all fields" });
-  }
-
-  try {
-    const pool = await getConnection();
-
-    await pool
-      .request()
-      .input("id_api", sql.Int, id_api)
-      .input("id_usr", sql.Int, id_usr)
-      .query(queries.updateFavoriteState);
-
-    res.json("Favorite updated succesfully!");
-  } catch (error) {
-    res.status(500);
-    res.send(error.message);
-  }
-}
-
-export const getAllFavoritesByUserID = async (req,res) => {
-  try {
-    const pool = await getConnection();
-
-    const result = await pool
-      .request()
-      .input("id_usr", req.query.id_usr)
-      .query(queries.getAllFavoritesByUserID);
-    
-      var obj = {
-        count: 0,
-        entries: result.recordset,
-      };
-  
-      obj.count = Object.keys(result.recordset).length;
-  
-      res.json(obj);
-  } catch (error) {
-    res.status(500);
-    res.send(error.message);
-  }
 }

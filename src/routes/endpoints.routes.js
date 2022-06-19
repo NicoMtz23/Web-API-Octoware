@@ -1,31 +1,24 @@
 import { Router } from "express";
-import { addNewAPI, deleteAPIByID, getApiCount, getApiDetailByID, getCatalogueData, getMethodCount, getRandomAPI, updateAPIByID, updateDispByID } from "../controllers/apis.controller";
+import { addMethodByCat, deleteMethodByID, getAllEndpoints, getEndpointByID, updateMethodByID } from "../controllers/endpoints.controller";
 
 const router = Router()
 
 //GET###############################################################################################################################################################################################
-router.get("/apis/table", getCatalogueData)
+router.get("/endpoints/", getAllEndpoints)
 
-router.get("/apis/:id_api", getApiDetailByID)
+router.get("/endpoints/:id_end", getEndpointByID)
 
-router.get("/dashboard/api/", getApiCount)
-
-router.get("/dashboard/method/", getMethodCount)
-
-router.get("/dashboard/rand", getRandomAPI)
 
 //POST##############################################################################################################################################################################################
-router.post("/apis/", addNewAPI)
+router.post("/endpoints/:id_cat", addMethodByCat)
 
 
 //PUT###############################################################################################################################################################################################
-router.put("/apis/:id_api", updateAPIByID)
-
-router.put("/apis/disp/:id_api", updateDispByID)
+router.put("/endpoints/:id_end", updateMethodByID)
 
 
 //DELETE############################################################################################################################################################################################
-router.delete("/apis/:id_api", deleteAPIByID)
+router.delete("/endpoints/:id_end", deleteMethodByID)
 
 
 export default router

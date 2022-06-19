@@ -1,31 +1,27 @@
 import { Router } from "express";
-import { addNewAPI, deleteAPIByID, getApiCount, getApiDetailByID, getCatalogueData, getMethodCount, getRandomAPI, updateAPIByID, updateDispByID } from "../controllers/apis.controller";
+import { addParamByEndpoint, addResponseByEndpoint, deleteParamByID, deleteResponseByID, getParamsByEndpoint, getResponseByEndpoint, updateParamsByID, updateResponseByID } from "../controllers/requests.controller";
 
 const router = Router()
 
 //GET###############################################################################################################################################################################################
-router.get("/apis/table", getCatalogueData)
+router.get("/param/:id_end", getParamsByEndpoint)
 
-router.get("/apis/:id_api", getApiDetailByID)
+router.get("/response/:id_end", getResponseByEndpoint)
 
-router.get("/dashboard/api/", getApiCount)
-
-router.get("/dashboard/method/", getMethodCount)
-
-router.get("/dashboard/rand", getRandomAPI)
 
 //POST##############################################################################################################################################################################################
-router.post("/apis/", addNewAPI)
+router.post("/param/:id_end", addParamByEndpoint)
 
+router.post("/response/:id_end", addResponseByEndpoint)
 
 //PUT###############################################################################################################################################################################################
-router.put("/apis/:id_api", updateAPIByID)
+router.put("/param/:id_param", updateParamsByID)
 
-router.put("/apis/disp/:id_api", updateDispByID)
-
+router.put("/response/:id_respuestas_end", updateResponseByID)
 
 //DELETE############################################################################################################################################################################################
-router.delete("/apis/:id_api", deleteAPIByID)
+router.delete("/param/:id_param", deleteParamByID)
 
+router.delete("/response/:id_respuestas_end", deleteResponseByID)
 
 export default router

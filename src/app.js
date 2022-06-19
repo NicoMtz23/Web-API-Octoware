@@ -3,8 +3,12 @@ import config from "./config";
 import cors from "cors";
 import morgan from "morgan";
 
-import usersRoutes from "./routes/users.routes"
 import apisRoutes from "./routes/apis.routes"
+import categoriesRoutes from "./routes/categories.routes"
+import endpointsRoutes from "./routes/endpoints.routes"
+import favoritesRoutes from "./routes/favorites.routes"
+import requestsRoutes from "./routes/requests.routes"
+import usersRoutes from "./routes/users.routes"
 
 const app = express()
 
@@ -18,6 +22,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 //Rutas
-app.use(usersRoutes, apisRoutes)
+app.use(usersRoutes, apisRoutes, categoriesRoutes, endpointsRoutes, favoritesRoutes, requestsRoutes)
 
 export default app

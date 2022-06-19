@@ -1,23 +1,93 @@
 export const queries = {
-    getAllUsers: "SELECT * FROM [IPS_API_MANAGEMENT_8].dbo.Usuario",
-    addNewUser: "IF NOT EXISTS (SELECT email FROM Dbo.Usuario WHERE email = @email)BEGIN INSERT INTO dbo.Usuario (nombre_usr, email, estatus, id_tipo_usr) VALUES(@nombre_usr,@email,1,@id_tipo_usr); END",
-    logicDeleteUser: "UPDATE [IPS_API_MANAGEMENT_8].dbo.Usuario SET Usuario.estatus = 0 WHERE Usuario.id_usr = @id_usr",
-    deleteUser: "DELETE FROM [IPS_API_MANAGEMENT_8].dbo.Usuario WHERE id_usr= @id_usr",
-    updateRoleById: "UPDATE  [IPS_API_MANAGEMENT_8].dbo.Usuario SET id_tipo_usr  = @id_tipo_usr  WHERE id_usr = @id_usr",
-    getTableData: "SELECT id_api, nombre_api, disp_api, seguridad_api, ult_conexion_api, version_api from API",
-    getUserByEmail: "SELECT Usuario.id_usr, Usuario.nombre_usr, Usuario.email, Tipo_Usr.tipo_usr FROM Usuario JOIN Tipo_Usr ON Usuario.id_tipo_usr = Tipo_Usr.id_tipo_usr WHERE email=@email",
-    getDetailedAPI: "SELECT *FROM [IPS_API_MANAGEMENT_8].dbo.API WHERE id_api = @id_api",
-    addNewAPI: "INSERT INTO [IPS_API_MANAGEMENT_8].dbo.API (nombre_api, seguridad_api, ult_conexion_api, version_api, url_base, descripcion_api, api_key, disp_api) VALUES (@nombre_api, @seguridad_api, @ult_conexion_api, @version_api,@url_base,@descripcion_api,@api_key,@disp_api );",
-    getAllCategories: "SELECT * FROM [IPS_API_MANAGEMENT_8].dbo.Categoria",
-    getCategoriesByID: "SELECT id_cat, nombre_cat FROM Categoria WHERE id_api=@id_api",
-    getEndpointsByCat: "SELECT Endpoint.id_end, Endpoint.nombre_end, Tipo_Endpoint.tipo_end, Endpoint.id_cat FROM dbo.Endpoint JOIN Tipo_Endpoint ON Endpoint.id_tipo_end = Tipo_Endpoint.id_tipo_end",
-    getSpecificEndpointByID: "SELECT Endpoint.id_end,  Endpoint.nombre_end, Endpoint.url_end, Endpoint.docum_end, Endpoint.pruebas_end, Endpoint.expected_ans, Tipo_Endpoint.tipo_end FROM DBO.Endpoint JOIN Tipo_Endpoint ON Endpoint.id_tipo_end = Tipo_Endpoint.id_tipo_end WHERE id_end = @id_end",
-    getParamsByID: "SELECT Parametro.id_param, Parametro.nombre_param, Parametro.obligatorio_param, Tipo_Param.tipo_param FROM DBO.Parametro JOIN Tipo_Param ON Parametro.id_tipo_param = Tipo_Param.id_tipo_param WHERE id_end = @id_end",
-    getResponseByID: "SELECT Respuestas_End.id_respuestas_end, Respuestas_End.name_resp, Tipo_Param.tipo_param FROM Respuestas_End JOIN Tipo_Param ON Respuestas_End.id_tipo_param = Tipo_Param.id_tipo_param WHERE id_end = @id_end",
-    addCategoriesByID: "INSERT INTO [IPS_API_MANAGEMENT_8].dbo.Categoria VALUES (@nombre_cat, @id_api);",
-    getFavorite: "EXEC SP_GET_FAV @id_api , @id_usr",
-    addFavorite: "EXEC SP_POST_FAV @id_api , @id_usr",
-    updateFavoriteState: "EXEC SP_PUT_FAV @id_api , @id_usr",
-    getAllFavoritesByUserID: "SELECT a.nombre_api, a.disp_api, a.ult_conexion_api, a.version_api from API a join Favorito ON Favorito.id_api = a.id_api WHERE Favorito.id_usr = @id_usr;"
+    //GET###############################################################################################################################################################################################
+    //User
+    getAllUsers: "EXEC sp_GetAllUsers",
+    getUserByEmail: "EXEC sp_GetUserByEmail @email",
+
+    //API
+    getCatalogueData: "EXEC sp_GetCatalogueData",
+    getApiDetailByID: "EXEC sp_ApiDetailByID @id_api",
+
+    //Category
+    getCategoriesByAPI: "EXEC sp_GetCategoriesByAPI @id_api",
+    getAllCategories: "EXEC sp_GetAllCategories",
+
+    //Endpoint
+    getAllEndpoints: "EXEC sp_GetAllEndpoints",
+    getEndpointByID: "EXEC sp_GetEndpointByID @id_end",
+    
+    //Param & Response
+    getParamsByEndpoint: "EXEC sp_GetParamsByEndpoint @id_end",
+    getResponseByEndpoint: "EXEC sp_GetResponseByEndpoint @id_end",
+
+    //Favorite
+    getSpecificFavByUser: "EXEC sp_GetSpecificFavByUser @id_api , @id_usr",
+    getAllFavsByUser: "EXEC sp_GetAllFavsByUser @id_usr" ,
+
+    getMethodCount:"EXEC SP_COUNT_METHODS",
+    getApiCount:"EXEC SP_COUNT_APIS",
+    getRandomAPI:"EXEC SP_RANDOM_API",
+
+    //POST##############################################################################################################################################################################################
+    //User
+    addNewUser: "EXEC sp_AddNewUser @nombre_usr, @email, @id_tipo_usr",
+
+    //API
+    addNewAPI: "EXEC sp_AddNewAPI @nombre_api, @seguridad_api, @ult_conexion_api, @version_api, @url_base, @descripcion_api, @api_key, @disp_api, @url_prueba",
+    
+    //Category
+    addCategoriesByAPI: "EXEC sp_AddCategoriesByAPI @nombre_cat, @id_api",
+
+    //Endpoint
+    addMethodByCat:"EXEC sp_AddMethodByCat @nombre_end, @url_end, @docum_end, @pruebas_end, @expected_ans, @id_cat, @id_tipo_end, @body",
+
+    //Favorite
+    addFavByUser: "EXEC sp_AddFavByUser @id_api , @id_usr",
+
+    //Requests
+    addParamsByEndpoint: "insert into dbo.Parametro values ( @nombre_param, @obligatorio_param, @id_end, @id_tipo_param, @query)",
+    addResponseByEndpoint: "EXEC sp_AddResponseByEndpoint @name_resp, @id_end, @id_tipo_param ",
+
+
+    //PUT###############################################################################################################################################################################################
+    //User
+    updateRoleByID: "EXEC sp_UpdateRoleByID @id_usr, @id_tipo_usr",
+    
+    //API
+    updateAPIByID: "EXEC sp_UpdateAPIByID @nombre_api, @version_api, @url_base, @descripcion_api, @api_key, @id_api, @url_prueba",
+    updateDispByID:"EXEC sp_UpdateDispByID @disp_api, @ult_conexion_api, @id_api",
+
+    //Category
+    updateCategoryByID: "EXEC sp_UpdateCategoryByID @nombre_cat, @id_cat",
+
+    //Endpoint
+    updateMethodByID:"EXEC sp_UpdateMethodByID @nombre_end, @url_end, @docum_end, @pruebas_end, @expected_ans, @id_tipo_end, @id_end, @body",
+
+    //Favorite
+    updateFavByUser: "EXEC sp_UpdateFavByUser @id_api , @id_usr",
+
+    //Requests
+    updateParamsByID: "EXEC sp_updateParamsByID @nombre_param, @obligatorio_param, @id_tipo_param, @query, @id_param",
+    updateResponseByID: "EXEC sp_updateResponseByID @name_resp, @id_tipo_param, @id_respuestas_end",
+
+    
+    //DELETE############################################################################################################################################################################################
+    //User
+    logicDeleteUserByID: "EXEC sp_LogicDeleteUserByID @id_usr",
+    logicActivationUserByID: "EXEC sp_LogicActivationUserByID @id_usr",
+    deleteUserByID: "EXEC sp_DeleteUserByID @id_usr",
+
+    //API
+    deleteAPIByID: "EXEC sp_DeleteAPIByID @id_api",
+
+    //Category
+    deleteCategoryByID: "EXEC sp_DeleteCategoryByID @id_cat",
+
+    //Endpoint
+    deleteMethodByID: "EXEC sp_DeleteMethodByID @id_end",
+
+    //Requests
+    deleteParamByID :"EXEC sp_DeleteParamByID @id_param",
+    deleteResponseByID :"EXEC sp_DeleteResponseByID @id_respuestas_end"
 }
  

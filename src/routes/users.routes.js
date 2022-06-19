@@ -1,30 +1,34 @@
 import { Router } from "express";
-import { createUser, LogicDeleteUserById, deleteUserById, getUsers, updateRoleById, getUserByEmail, generateGoogleToken, generateMSToken, getFavByIDs, postFav, putFav, getAllFavoritesByUserID} from "../controllers/users.controller"
+import { addNewUser, deleteUserByID, generateGoogleToken, generateMSToken, getAllUsers, getUserByEmail, logicActivationUserByID, logicDeleteUserByID, updateRoleByID } from "../controllers/users.controller";
 
 const router = Router()
 
-router.get("/users", getUsers)
-
-router.post("/users", createUser)
-
-router.put("/users/:id_usr", updateRoleById)
-
-router.put("/users/estatus/:id_usr", LogicDeleteUserById)
-
-router.delete("/users/:id_usr", deleteUserById)
+//GET###############################################################################################################################################################################################
+router.get("/users/", getAllUsers)
 
 router.get("/users/email/", getUserByEmail)
+ 
 
+//POST##############################################################################################################################################################################################
+router.post("/users/", addNewUser)
+
+
+//PUT###############################################################################################################################################################################################
+router.put("/users/:id_usr", updateRoleByID)
+
+router.put("/users/status/:id_usr", logicDeleteUserByID)
+
+router.put("/users/active/:id_usr", logicActivationUserByID)
+
+
+//DELETE############################################################################################################################################################################################
+router.delete("/users/:id_usr", deleteUserByID)
+
+
+//AUTH##############################################################################################################################################################################################
 router.post("/users/auth/google", generateGoogleToken)
 
 router.post("/users/auth/ms", generateMSToken)
 
-router.get("/favDisp/", getFavByIDs)
-
-router.post("/favDisp/", postFav)
-
-router.put('/favDisp/', putFav)
-
-router.get("/tablefavs/", getAllFavoritesByUserID)
 
 export default router
