@@ -8,3 +8,18 @@ It consists of controllers and routes, classified with the elements in DB (APIs,
 A file called queries.js has all the SQL queries that the routes use to manipulate the Database. For security, Database has Stored Procedures for every query, so they are not specified explicitly on the queries.js file.
 
 Following the security topic, the API uses environment variables. To generate a successful connection to the Database a .env file must be included.
+
+### Used Libraries
++ google-auth-library
++ jsonwebtoken
++ moment-timezone
++ @babel/core (with -D)
++ @babel/cli (with -D)
++ @babel/preset-env (with -D)
++ @babel/node (with -D)
++ nodemon (with -D)
++ mssql
++ express
++ morgan
++ cors
++ dotenv
